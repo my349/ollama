@@ -49,6 +49,8 @@ import (
 	"github.com/ollama/ollama/version"
 )
 
+var apiPrefix = os.Getenv("OLLAMA_API_PREFIX")
+
 func shouldUseHarmony(model *Model) bool {
 	if slices.Contains([]string{"gptoss", "gpt-oss"}, model.Config.ModelFamily) {
 		// heuristic to check whether the template expects to be parsed via harmony:
@@ -1509,7 +1511,7 @@ func Serve(ln net.Listener) error {
 		return err
 	}
 
-	http.Handle("/", h)
+	http.Handle("/"+apiPrefix, h)
 
 	ctx, done := context.WithCancel(context.Background())
 	schedCtx, schedDone := context.WithCancel(ctx)
